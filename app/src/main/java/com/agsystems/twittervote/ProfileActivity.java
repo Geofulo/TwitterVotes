@@ -5,16 +5,31 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.SessionManager;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.models.User;
 
 
 public class ProfileActivity extends ActionBarActivity {
+
+    TextView tv_username;
+    TextView tv_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        TwitterSession active_session = Twitter.getSessionManager().getActiveSession();
+        active_session.getUserId();
+
+        tv_username = (TextView) findViewById(R.id.tv_username);
+        tv_id = (TextView) findViewById(R.id.tv_id);
+        tv_username.setText("Username: " + active_session.getUserName());
+        tv_id.setText("Id: " + active_session.getUserId());
     }
 
 
@@ -39,6 +54,10 @@ public class ProfileActivity extends ActionBarActivity {
             case R.id.action_timeline:
                 //startActivity(new Intent(this, TweetListActivity.class));
                 startActivity(new Intent(this, TimelineActivity.class));
+                break;
+            case R.id.action_vote:
+                //startActivity(new Intent(this, TweetListActivity.class));
+                startActivity(new Intent(this, VoteHashtagActivity.class));
                 break;
             default:
                 break;

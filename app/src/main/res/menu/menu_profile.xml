@@ -16,5 +16,10 @@
         android:title="Timeline"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_vote"
+        android:title="Vote!"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 
 </menu>

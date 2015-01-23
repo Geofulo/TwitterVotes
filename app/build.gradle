@@ -44,4 +44,7 @@ dependencies {
     compile('com.twitter.sdk.android:tweet-ui:1.0.0@aar') {
         transitive = true;
     }
+    compile('com.crashlytics.sdk.android:crashlytics:2.2.0@aar') {
+        transitive = true;
+    }
 }

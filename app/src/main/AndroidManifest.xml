@@ -39,8 +39,8 @@
             android:label="@string/title_activity_timeline" >
         </activity>
         <activity
-            android:name=".TweetListActivity"
-            android:label="@string/title_activity_tweet_list" >
+            android:name=".VoteHashtagActivity"
+            android:label="@string/title_activity_vote_hashtag" >
         </activity>
     </application>
 
