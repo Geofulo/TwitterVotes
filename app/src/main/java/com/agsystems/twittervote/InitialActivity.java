@@ -19,8 +19,8 @@ import com.twitter.sdk.android.core.TwitterSession;
 public class InitialActivity extends Activity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "v1MI4rYhGWrywah49lvSVzTX2";
-    private static final String TWITTER_SECRET = "wGL1m25ZTj1eD1pEc39q2ep2zvTZzDcPpX5IMo1x0hbLZD98SO";
+    private static final String TWITTER_KEY = "eusEd78KqUDYsClSqYAKjdeeU";
+    private static final String TWITTER_SECRET = "C4oARBEXPHY3h99FWzcTdk1l9NT4CgH2XvVehFw7A4AlggiNIs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

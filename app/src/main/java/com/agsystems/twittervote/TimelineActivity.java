@@ -1,12 +1,16 @@
 package com.agsystems.twittervote;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import io.fabric.sdk.android.Fabric;
@@ -39,12 +43,13 @@ public class TimelineActivity extends ListActivity {
 
     final TweetViewFetchAdapter adapter = new TweetViewFetchAdapter<CompactTweetView>(TimelineActivity.this);
     List<Long> tweetsIds = new ArrayList<>();
+    final String HASHTAG_TWIITERVOTE = "VIDEOCNN";
+    VoteAdapter vote_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        setListAdapter(adapter);
         cargarTweets();
     }
 
@@ -53,37 +58,51 @@ public class TimelineActivity extends ListActivity {
         //TwitterApiClient twitterApiClient = TwitterCore.getInstance().getApiClient();
         MyTwitterApiClient twitterApiClient = new MyTwitterApiClient(active_session);
         StatusesService statusesService = twitterApiClient.getStatusesService();
-        statusesService.homeTimeline(20, null, null, null, null, null, null, new Callback<List<Tweet>>() {
+        statusesService.homeTimeline(100, null, null, null, null, null, null, new Callback<List<Tweet>>() {
 
             @Override
             public void success(Result<List<Tweet>> result) {
                 List<Tweet> tweets = result.data;
                 TweetEntities tweet_entities;
                 List<HashtagEntity> hashtags;
+                List<Tweet> vote_tweets = new ArrayList<Tweet>();
                 Tweet tweet;
                 Log.i("IDK!!!!!!!", "SUCCESS!!!!");
                 Log.i("TWEETS SIZE", String.valueOf(tweets.size()));
                 for(int i=0; i<tweets.size(); i++) {
                     tweet = tweets.get(i);
-                    Log.i("TWEETS NAME", tweets.get(i).user.name);
-                    Log.i("TWEETS TEXT", tweets.get(i).text);
+                    Log.i("TWEETS NAME", tweet.user.name);
+                    Log.i("TWEETS TEXT", tweet.text);
 
                     tweet_entities = tweets.get(i).entities;
                     hashtags = tweet_entities.hashtags;
-                    for(int j=0; j<hashtags.size(); j++){
-                        Log.i("TWEET HASHTAG", hashtags.get(j).text);
-                    }
-                    // Si tiene hashtags y no les haya dado retweet o fav
 
-                    if(!hashtags.isEmpty()){
-                       if(!tweet.favorited && !tweet.retweeted){
-                           // Agrego el id del tweet
-                           tweetsIds.add(tweet.id);
-                       }
+
+                    // Si tiene hashtags y no les haya dado retweet o fav
+                    if(!hashtags.isEmpty() && !tweet.favorited && !tweet.retweeted){
+                        Boolean has_twittervote_hashtag = false;
+                        String tweet_hashtag;
+                        for(int j=0; j<hashtags.size(); j++){
+                            tweet_hashtag = hashtags.get(j).text.toUpperCase();
+                            Log.i("TWEET HASHTAG", tweet_hashtag);
+                            // Revisamos si tiene nuestro hashtag
+                            if(tweet_hashtag.equals(HASHTAG_TWIITERVOTE)){
+                                // Agrego el id del tweet
+                                Log.i("TWEET HASHTAG MATCH", tweet.text);
+                                tweetsIds.add(tweet.id);
+                                vote_tweets.add(tweet);
+                            }
+                        }
                     }
 
                 }
 
+                Log.i("VOTE TWEETS SIZE", String.valueOf(vote_tweets.size()));
+
+                vote_adapter = new VoteAdapter(getBaseContext(), vote_tweets);
+                setListAdapter(vote_adapter);
+
+                /*
                 adapter.setTweetIds(tweetsIds, new LoadCallback<List<Tweet>>() {
                     @Override
                     public void success(List<Tweet> tweets) {
@@ -96,6 +115,7 @@ public class TimelineActivity extends ListActivity {
                         exception.printStackTrace();
                     }
                 });
+                */
             }
 
             public void failure(TwitterException exception) {
@@ -107,6 +127,7 @@ public class TimelineActivity extends ListActivity {
 
         Log.i("TWEETS IDS SIZE", String.valueOf(tweetsIds.size()));
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
