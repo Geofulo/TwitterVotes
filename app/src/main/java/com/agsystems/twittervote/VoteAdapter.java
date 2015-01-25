@@ -60,7 +60,7 @@ public class VoteAdapter extends BaseAdapter{
         TextView tv_email_vote_tweet = (TextView) v.findViewById(R.id.tv_email_vote_tweet);
         TextView tv_text_vote_tweet = (TextView) v.findViewById(R.id.tv_text_vote_tweet);
         final Button btn_hashtag1_vote_tweet = (Button) v.findViewById(R.id.btn_hashtag1_vote_tweet);
-        Button btn_hashtag2_vote_tweet = (Button) v.findViewById(R.id.btn_hashtag2_vote_tweet);
+        final Button btn_hashtag2_vote_tweet = (Button) v.findViewById(R.id.btn_hashtag2_vote_tweet);
 
         tv_username_vote_tweet.setText(vote_tweet.user.name);
         tv_email_vote_tweet.setText("@" + vote_tweet.user.screenName);
@@ -80,7 +80,7 @@ public class VoteAdapter extends BaseAdapter{
         btn_hashtag2_vote_tweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String choice = btn_hashtag1_vote_tweet.getText().toString();
+                String choice = btn_hashtag2_vote_tweet.getText().toString();
                 Toast.makeText(context, choice + "" + choice2, Toast.LENGTH_SHORT).show();
             }
         });

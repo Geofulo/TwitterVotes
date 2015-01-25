@@ -16,5 +16,6 @@
     <string name="action_example">Example action</string>
     <string name="title_activity_tweet_list">TweetList</string>
     <string name="title_activity_vote_hashtag">VoteHashtag</string>
+    <string name="title_activity_new_vote_tweet">New Vote Tweet</string>
 
 </resources>

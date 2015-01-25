@@ -26,7 +26,6 @@ public class ProfileActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-
         TwitterSession active_session = Twitter.getSessionManager().getActiveSession();
         active_session.getUserId();
 
@@ -58,10 +57,6 @@ public class ProfileActivity extends ActionBarActivity {
             case R.id.action_timeline:
                 //startActivity(new Intent(this, TweetListActivity.class));
                 startActivity(new Intent(this, TimelineActivity.class));
-                break;
-            case R.id.action_vote:
-                //startActivity(new Intent(this, TweetListActivity.class));
-                startActivity(new Intent(this, VoteHashtagActivity.class));
                 break;
             default:
                 break;

@@ -1,17 +1,20 @@
 package com.agsystems.twittervote;
 
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ListActivity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.Window;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -39,17 +42,21 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class TimelineActivity extends ListActivity {
+public class TimelineActivity extends ActionBarActivity {
 
-    final TweetViewFetchAdapter adapter = new TweetViewFetchAdapter<CompactTweetView>(TimelineActivity.this);
-    List<Long> tweetsIds = new ArrayList<>();
-    final String HASHTAG_TWIITERVOTE = "VIDEOCNN";
+    final String HASHTAG_TWIITERVOTE = "FCBLIVE";
     VoteAdapter vote_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_timeline);
+
+        if(toolbar != null) {
+            setSupportActionBar(toolbar);
+            android.support.v7.app.ActionBar action_bar =  getSupportActionBar();
+        }
         cargarTweets();
     }
 
@@ -77,7 +84,6 @@ public class TimelineActivity extends ListActivity {
                     tweet_entities = tweets.get(i).entities;
                     hashtags = tweet_entities.hashtags;
 
-
                     // Si tiene hashtags y no les haya dado retweet o fav
                     if(!hashtags.isEmpty() && !tweet.favorited && !tweet.retweeted){
                         Boolean has_twittervote_hashtag = false;
@@ -89,45 +95,26 @@ public class TimelineActivity extends ListActivity {
                             if(tweet_hashtag.equals(HASHTAG_TWIITERVOTE)){
                                 // Agrego el id del tweet
                                 Log.i("TWEET HASHTAG MATCH", tweet.text);
-                                tweetsIds.add(tweet.id);
                                 vote_tweets.add(tweet);
                             }
                         }
                     }
-
                 }
 
                 Log.i("VOTE TWEETS SIZE", String.valueOf(vote_tweets.size()));
 
                 vote_adapter = new VoteAdapter(getBaseContext(), vote_tweets);
-                setListAdapter(vote_adapter);
-
-                /*
-                adapter.setTweetIds(tweetsIds, new LoadCallback<List<Tweet>>() {
-                    @Override
-                    public void success(List<Tweet> tweets) {
-                        // my custom actions
-                        Log.i("ADAPTER!!!!!!!", "SUCCESS!!!!");
-                    }
-                    @Override
-                    public void failure(TwitterException exception) {
-                        // Toast.makeText(...).show();
-                        exception.printStackTrace();
-                    }
-                });
-                */
+                ListView listview_tweets = (ListView) findViewById(R.id.listview_tweets);
+                listview_tweets.setAdapter(vote_adapter);
+                //setListAdapter(vote_adapter);
             }
 
             public void failure(TwitterException exception) {
-                //Do something on failure
                 Log.i("IDK!!!!!!!", "FAILURE!!!!");
                 exception.printStackTrace();
             }
         });
-
-        Log.i("TWEETS IDS SIZE", String.valueOf(tweetsIds.size()));
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -138,22 +125,21 @@ public class TimelineActivity extends ListActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         switch(id){
             case R.id.action_settings:
                 return true;
             case R.id.action_reload:
                 cargarTweets();
                 break;
+            case R.id.action_new_tweet:
+                startActivity(new Intent(this, NewVoteTweet.class));
+            case R.id.action_my_tweets:
+                Toast.makeText(getApplicationContext(), "My Vote Tweets", Toast.LENGTH_SHORT).show();
+                break;
             default:
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

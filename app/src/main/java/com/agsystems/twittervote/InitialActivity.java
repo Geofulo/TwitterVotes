@@ -32,7 +32,8 @@ public class InitialActivity extends Activity {
 
         TwitterSession active_session = Twitter.getSessionManager().getActiveSession();
         if (active_session != null) {
-            startActivity(new Intent(this, ProfileActivity.class));
+            //startActivity(new Intent(this, ProfileActivity.class));
+            startActivity(new Intent(this, TimelineActivity.class));
         } else {
             startActivity(new Intent(this, LoginActivity.class));
         }
